@@ -1,0 +1,50 @@
+.container {
+  width: 95vw;
+  max-width: 75ch;
+  padding: min(5vw, 5vh);
+}
+
+.navbar {
+  display: flex;
+  gap: 10px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  flex-wrap: wrap;
+}
+
+.navbar a {
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.inactive {
+  color: #555;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.inactive:hover {
+  color: #888;
+}
+
+.active {
+  color: #888;
+  cursor: default;
+}
+
+.calendar {
+  width: 100%;
+  height: min(550px, 115vw);
+  border-width: 0;
+}
+
+.calendarloading {
+  height: 30px;
+  overflow: hidden;
+  transition: height 0.2s;
+  font-weight: 500;
+}
+
+.invisible {
+  height: 0;
+}

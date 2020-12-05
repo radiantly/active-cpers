@@ -31,20 +31,3 @@
   color: #888;
   cursor: default;
 }
-
-.calendar {
-  width: 100%;
-  height: min(550px, 115vw);
-  border-width: 0;
-}
-
-.calendarloading {
-  height: 30px;
-  overflow: hidden;
-  transition: height 0.2s;
-  font-weight: 500;
-}
-
-.invisible {
-  height: 0;
-}

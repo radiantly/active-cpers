@@ -1,5 +1,6 @@
 import MainContainer from "../components/MainContainer.js";
 import Link from "../components/Link.js";
+import styles from "../styles/Home.module.css";
 
 export default function Home() {
   return (
@@ -11,14 +12,14 @@ export default function Home() {
       </p>
       <h2>Tell me more!</h2>
       <p>
-        We're students of Amrita Coimbatore and we currenty do the following
+        We're students of Amrita Coimbatore and we currently do the following
         competitive programming contests regularly:
       </p>
       <ul>
-        <li>Codechef</li>
+        <li>CodeChef</li>
         <li>Codeforces</li>
         <li>
-          Anything that the ACCC hosts (the Amrita Codechef Campus Chapter)
+          Anything that the ACCC hosts (the Amrita CodeChef Campus Chapter)
         </li>
       </ul>
       <h2>Sounds cool! Can I join?</h2>
@@ -33,7 +34,7 @@ export default function Home() {
         enforce one simple rule on all members.
       </p>
       <h2>What's this rule? 👀</h2>
-      <ul>
+      <ul className={styles.ruleslist}>
         <li>
           To stay a part of the group, you must{" "}
           <strong>regularly participate</strong> in competitive programming
@@ -49,6 +50,14 @@ export default function Home() {
       </ul>
       <p>
         Sounds good? Join us <Link href="/join">here</Link>.
+      </p>
+      <p>
+        Found a typo? Or want to improve the site? Feel free to open an issue/PR
+        on the{" "}
+        <a href="https://github.com/radiantly/active-cpers" target="_blank">
+          GitHub repo
+        </a>
+        .
       </p>
     </MainContainer>
   );

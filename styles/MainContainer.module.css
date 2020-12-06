@@ -1,0 +1,40 @@
+.container {
+  width: 95vw;
+  max-width: 75ch;
+  padding: min(5vw, 5vh);
+}
+
+.navbar {
+  display: flex;
+  gap: 10px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  flex-wrap: wrap;
+}
+
+.container a:not(.active) {
+  color: #555;
+  transition: color 0.2s;
+}
+
+.container a:hover,
+.active {
+  color: #888;
+}
+
+.container p > a {
+  text-decoration: underline dotted #555;
+}
+
+.container p > a:visited {
+  text-decoration: underline dotted #9247e4;
+}
+
+.navbar a {
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.active {
+  cursor: default;
+}

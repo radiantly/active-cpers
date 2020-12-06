@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Link from "./Link.js";
-import styles from "../styles/Home.module.css";
+import styles from "../styles/MainContainer.module.css";
 
 export default function MainContainer(props) {
   return (

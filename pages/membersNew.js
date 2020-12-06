@@ -9,7 +9,10 @@ export default function Members(props) {
     if (heading == "CodeChef")
       return (
         <td>
-          <a href={`https://www.codechef.com/users/${member[heading]}`}>
+          <a
+            target="_blank"
+            href={`https://www.codechef.com/users/${member[heading]}`}
+          >
             {member[heading]}
           </a>
         </td>
@@ -18,7 +21,10 @@ export default function Members(props) {
     if (heading == "Codeforces")
       return (
         <td>
-          <a href={`https://codeforces.com/profile/${member[heading]}`}>
+          <a
+            target="_blank"
+            href={`https://codeforces.com/profile/${member[heading]}`}
+          >
             {member[heading]}
           </a>
         </td>

@@ -1,0 +1,22 @@
+.memberTable {
+  width: 100%;
+}
+
+.memberTable th {
+  font-weight: 600;
+  text-align: left;
+}
+
+.memberTable td.empty::after {
+  content: "-";
+}
+
+.memberTable a {
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.memberTable a:hover {
+  text-decoration: underline dotted;
+  color: #777;
+}

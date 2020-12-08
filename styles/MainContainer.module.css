@@ -1,7 +1,7 @@
 .container {
   width: 95vw;
   max-width: 75ch;
-  padding: min(5vw, 5vh);
+  padding: 2vmin;
 }
 
 .navbar {

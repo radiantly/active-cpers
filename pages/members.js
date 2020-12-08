@@ -3,12 +3,12 @@ import styles from "../styles/Members.module.css";
 import { fetchMembers } from "../lib/memberslist.js";
 import { shuffleArray } from "../lib/util.js";
 export default function Members(props) {
-  const generateTD = (member, heading) => {
-    if (!member[heading]) return <td className={styles.empty}></td>;
+  const generateTD = (member, heading, key) => {
+    if (!member[heading]) return <td key={key} className={styles.empty}></td>;
 
     if (heading == "CodeChef")
       return (
-        <td>
+        <td key={key}>
           <a
             target="_blank"
             href={`https://www.codechef.com/users/${member[heading]}`}
@@ -20,7 +20,7 @@ export default function Members(props) {
 
     if (heading == "Codeforces")
       return (
-        <td>
+        <td key={key}>
           <a
             target="_blank"
             href={`https://codeforces.com/profile/${member[heading]}`}
@@ -29,7 +29,7 @@ export default function Members(props) {
           </a>
         </td>
       );
-    return <td>{member[heading]}</td>;
+    return <td key={key}>{member[heading]}</td>;
   };
 
   return (
@@ -37,15 +37,17 @@ export default function Members(props) {
       <p>This is a list of our currently active members</p>
       <table className={styles.memberTable}>
         <tr>
-          {props.headings.map((heading, idx) => (
-            <th key={idx}>{heading}</th>
+          {props.headings.map((heading) => (
+            <th key={heading}>{heading}</th>
           ))}
         </tr>
         {props.members
           .filter((member) => member["Status"] != "Inactive")
           .map((member) => (
-            <tr>
-              {props.headings.map((heading) => generateTD(member, heading))}
+            <tr key={JSON.stringify(member)}>
+              {props.headings.map((heading, idx) =>
+                generateTD(member, heading, idx)
+              )}
             </tr>
           ))}
       </table>

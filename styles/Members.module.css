@@ -27,3 +27,7 @@
     text-decoration: underline dotted #ccc;
   }
 }
+
+.memberTable tr.inactive {
+  opacity: 0.8;
+}

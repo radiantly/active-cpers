@@ -31,3 +31,7 @@
 .memberTable tr.inactive {
   opacity: 0.8;
 }
+
+.clickable {
+  cursor: pointer;
+}

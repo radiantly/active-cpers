@@ -1,0 +1,7 @@
+.summary {
+  cursor: pointer;
+}
+
+.summary:hover {
+  color: #555;
+}

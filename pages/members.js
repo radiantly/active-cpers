@@ -102,8 +102,9 @@ export default function Members(props) {
 }
 
 export async function getStaticProps(context) {
+  const expectedHeadings = ["Name", "CodeChef", "Codeforces"];
   let { headings, members } = await fetchMembers();
-  headings = headings.filter((elem) => elem != "Status");
+  headings = headings.filter((heading) => expectedHeadings.includes(heading));
   const cfUsernames = members
     .filter((member) => member["Codeforces"])
     .map((member) => member["Codeforces"]);

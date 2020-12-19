@@ -1,7 +1,7 @@
 import MainContainer from "../components/MainContainer.js";
 import styles from "../styles/Members.module.css";
 import { useState } from "react";
-import { fetchMembers, getSafeCfRatings } from "../lib/memberslist.js";
+import { fetchMembers, getSafeCfUserInfo } from "../lib/memberslist.js";
 import { shuffleArray, cfRatingSort } from "../lib/util.js";
 
 export default function Members(props) {
@@ -13,7 +13,7 @@ export default function Members(props) {
 
   // Members list - sort if `displayCF` is true
   const membersList = displayCF
-    ? cfRatingSort([...props.members], props.cfRatings)
+    ? cfRatingSort([...props.members], props.cfUsers)
     : props.members;
 
   // This function generates a <td> element of the table
@@ -37,15 +37,21 @@ export default function Members(props) {
     // If heading is Codeforces, then link to Codeforces profile
     if (heading == "Codeforces") {
       const cfUsername = member[heading];
-      const cfRating = props.cfRatings[cfUsername];
+      const { rating, rank } = props.cfUsers[cfUsername] || {};
       // Add the Codeforces rating if it exists and if `displayCF` is true
       const finalText =
-        cfUsername + (cfRating && displayCF ? ` [${cfRating}]` : "");
+        cfUsername + (rating && displayCF ? ` [${rating}]` : "");
       return (
         <td key={key}>
           <a
             target="_blank"
-            href={`https://codeforces.com/profile/${member[heading]}`}
+            href={`https://codeforces.com/profile/${cfUsername}`}
+            title={
+              rank
+                ? rank.replace(/(^\w)|(\s\w)/, (match) => match.toUpperCase()) +
+                  ` ${cfUsername}`
+                : null
+            }
           >
             {finalText}
           </a>
@@ -108,14 +114,13 @@ export async function getStaticProps(context) {
   const cfUsernames = members
     .filter((member) => member["Codeforces"])
     .map((member) => member["Codeforces"]);
-  const cfRatings = await getSafeCfRatings(cfUsernames);
-  console.log(cfUsernames, cfRatings);
+  const cfUsers = await getSafeCfUserInfo(cfUsernames);
   shuffleArray(members);
   return {
     props: {
       headings,
       members,
-      cfRatings,
+      cfUsers,
     },
     revalidate: 300,
   };

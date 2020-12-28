@@ -80,7 +80,7 @@ export default function Members(props) {
             className={styles.clickable}
             onClick={(e) => setDisplayCF(!displayCF)}
           >
-            Codeforces
+            Codeforces {displayCF ? "▼" : "▲"}
           </th>
         </tr>
         {membersList

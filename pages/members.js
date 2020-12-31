@@ -1,8 +1,10 @@
 import MainContainer from "../components/MainContainer.js";
 import styles from "../styles/Members.module.css";
 import { useState } from "react";
-import { fetchMembers, getSafeCfUserInfo } from "../lib/memberslist.js";
-import { shuffleArray, cfRatingSort } from "../lib/util.js";
+import { fetchMembers } from "../lib/memberslist.js";
+import { getSafeCfUserInfo } from "../lib/codeforces.js";
+import { getSafeCodeChefUserInfo } from "../lib/codechef.js";
+import { shuffleArray, ratingSort } from "../lib/util.js";
 
 export default function Members(props) {
   // Whether only active or all members are shown
@@ -11,10 +13,24 @@ export default function Members(props) {
   // Whether Codeforces ratings should be shown
   const [displayCF, setDisplayCF] = useState(false);
 
-  // Members list - sort if `displayCF` is true
-  const membersList = displayCF
-    ? cfRatingSort([...props.members], props.cfUsers)
-    : props.members;
+  // Whether CodeChef ratings should be shown
+  const [displayCC, setDisplayCC] = useState(false);
+
+  // What to sort by
+  const [sortBy, setSortBy] = useState(false);
+
+  const getSortedMembers = () => {
+    if (sortBy == "Codeforces" || (displayCF && !displayCC))
+      return ratingSort([...props.members], "Codeforces", props.cfUsers);
+
+    if (sortBy == "CodeChef" || displayCC)
+      return ratingSort([...props.members], "CodeChef", props.ccUsers);
+
+    return props.members;
+  };
+
+  // Members list
+  const membersList = getSortedMembers();
 
   // This function generates a <td> element of the table
   const generateTD = (member, heading, key) => {
@@ -22,17 +38,22 @@ export default function Members(props) {
     if (!member[heading]) return <td key={key} className={styles.empty}></td>;
 
     // If heading is CodeChef, link to Codechef profile
-    if (heading == "CodeChef")
+    if (heading == "CodeChef") {
+      const ccUsername = member[heading];
+      const { rating } = props.ccUsers[ccUsername] || {};
+      const finalText =
+        ccUsername + (rating && displayCC ? ` [${rating}]` : "");
       return (
         <td key={key}>
           <a
             target="_blank"
             href={`https://www.codechef.com/users/${member[heading]}`}
           >
-            {member[heading]}
+            {finalText}
           </a>
         </td>
       );
+    }
 
     // If heading is Codeforces, then link to Codeforces profile
     if (heading == "Codeforces") {
@@ -73,30 +94,45 @@ export default function Members(props) {
         {displayAll ? " all our members." : " our currently active members."}
       </p>
       <table className={styles.memberTable}>
-        <tr>
-          <th>Name</th>
-          <th>CodeChef</th>
-          <th
-            className={styles.clickable}
-            onClick={(e) => setDisplayCF(!displayCF)}
-          >
-            Codeforces {displayCF ? "▼" : "▲"}
-          </th>
-        </tr>
-        {membersList
-          .filter((member) => displayAll || member["Status"] != "Inactive")
-          .map((member) => (
-            <tr
-              key={JSON.stringify(member)}
-              className={
-                member["Status"] == "Inactive" ? styles.inactive : null
-              }
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th
+              className={styles.clickable}
+              onClick={(e) => {
+                setSortBy(!displayCC && "CodeChef");
+                setDisplayCC(!displayCC);
+              }}
             >
-              {props.headings.map((heading) =>
-                generateTD(member, heading, heading)
-              )}
-            </tr>
-          ))}
+              CodeChef {displayCC ? "▼" : "▲"}
+            </th>
+            <th
+              className={styles.clickable}
+              onClick={(e) => {
+                setSortBy(!displayCF && "Codeforces");
+                setDisplayCF(!displayCF);
+              }}
+            >
+              Codeforces {displayCF ? "▼" : "▲"}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {membersList
+            .filter((member) => displayAll || member["Status"] != "Inactive")
+            .map((member) => (
+              <tr
+                key={JSON.stringify(member)}
+                className={
+                  member["Status"] == "Inactive" ? styles.inactive : null
+                }
+              >
+                {props.headings.map((heading) =>
+                  generateTD(member, heading, heading)
+                )}
+              </tr>
+            ))}
+        </tbody>
       </table>
       <p>
         <a href="#" onClick={(e) => handleDisplayChange(e, !displayAll)}>
@@ -115,12 +151,14 @@ export async function getStaticProps(context) {
     .filter((member) => member["Codeforces"])
     .map((member) => member["Codeforces"]);
   const cfUsers = await getSafeCfUserInfo(cfUsernames);
+  const ccUsers = await getSafeCodeChefUserInfo();
   shuffleArray(members);
   return {
     props: {
       headings,
       members,
       cfUsers,
+      ccUsers,
     },
     revalidate: 300,
   };
